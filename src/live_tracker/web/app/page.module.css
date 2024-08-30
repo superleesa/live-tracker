@@ -28,3 +28,34 @@
   transform: scale(1.05); /* Slightly enlarge the box */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance the shadow */
 }
+
+.selectee_box {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  height: 100px; /* Adjust the height as needed */
+  width: 100px; /* Adjust the width as needed */
+  border: 1px solid gray; /* Example border */
+  cursor: pointer; /* Example cursor style */
+}
+
+.selected {
+  background-color: yellow; /* Example selected style */
+}
+
+.selectee_box_selected {
+  border: 2px solid #007bff; /* Solid border with a blue color */
+  color: #007bff; /* Blue color for text */
+}
+
+.selectee_box_wrapper{
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between text and icon */
+  padding: 10px;
+}
+
+.plot_section_window{
+  padding: 20px;
+  overflow-y: scroll;
+}
