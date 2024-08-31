@@ -14,21 +14,11 @@ import 'reactjs-popup/dist/index.css';
 
 import Header from './Header';
 import { SelectableBox } from './selectionBox';
+import { DataSource, DataFormatBase, NumberPairFormat, TextFormat, ImageFormat } from './dataSource';
 
-
-class DataSource {
-  name: string;
-  data_type: string;
-  data?: number[];
-
-  constructor(name: string, data_type: string, data?: number[]) {
-    this.name = name;
-    this.data_type = data_type;
-    this.data = data;
-  }
 }
 
-function get_available_plot_types(data_sources: DataSource[]): string[] {
+function get_available_plot_format(data_sources: DataSource<DataFormatBase>[]): string[] {
   const dataTypeToPlotType: { [key: string]: string[] } = {
     "number-number": ["line", "bar", "scatter"],
     "image": ["image"],
@@ -36,8 +26,8 @@ function get_available_plot_types(data_sources: DataSource[]): string[] {
   };
 
   if (data_sources.length == 1) {
-    return dataTypeToPlotType[data_sources[0].data_type];
-  }else if (data_sources.length != 0 && data_sources.every(data_source => data_source.data_type === "number-number")){
+    return dataTypeToPlotType[data_sources[0].format];
+  }else if (data_sources.length != 0 && data_sources.every(data_source => data_source.format === "number-number")){
     return ["line"]
   }else{
     return []
@@ -45,7 +35,7 @@ function get_available_plot_types(data_sources: DataSource[]): string[] {
 }
 
 function NewPlotBox() {
-  const [plotSelected, setPlotSelected] = useState(null);  // store null or PlotType
+  const [plotFormat, setPlotFormat] = useState<string | null>(null);  // store null or PlotType
   const [selectedDataSources, setSelectedDataSources] = useState<DataSource[]>([]);
   const avalailablePlotTypes = get_available_plot_types(selectedDataSources);
   console.log(selectedDataSources);
@@ -105,12 +95,11 @@ function NewPlotBox() {
                   <div>
                     <h2>2. Select Plot Type</h2>
                     <div className={styles.selectee_box_wrapper}>
-                      {Object.keys(avalailablePlotTypes).length === 0 ? <p>No compatible plots available</p> :
-                        (avalailablePlotTypes.map((plotType) => (
-                          <SelectableBox name={plotType} onClick={() => {
+                      {Object.keys(avalailablePlotFormat).length === 0 ? <p>No compatible plots available</p> :
+                        (avalailablePlotFormat.map((plot_format) => (
+                          <SelectableBox name={plot_format} onClick={() => {
                             // highlight this button (just add a css class)
-                            // 
-
+                            setPlotFormat(plot_format);
                           }} />
                         ))
                         )
