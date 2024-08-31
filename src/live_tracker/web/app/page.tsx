@@ -48,9 +48,9 @@ function NewPlotBox() {
 
 
   // TODO: i think we should have enum of data types (e.g. number, image, text) and plot types (e.g. line, bar, scatter)
-  const availableDataSourcesRef = useRef<DataSource[]>([new DataSource("data source 1", "number-number"), new DataSource("data source 2", "number-number"), new DataSource("data source 3", "text")])  // this is a mock data source; TODO: fetch from backend
+  const availableDataSourcesRef = useRef<DataSource<DataFormatBase>[]>([new DataSource<NumberPairFormat>("data source 1", "number-number"), new DataSource<NumberPairFormat>("data source 2", "number-number"), new DataSource<TextFormat>("data source 3", "text")])  // this is a mock data source; TODO: fetch from backend
   const availableDataSources = availableDataSourcesRef.current;
-  const dataSource1 = [[0,10], [1, 4], [2, 5], [3, 10], [4, 7]]  // TODO: we need to fetch this from the backend
+  const avalailablePlotFormat = get_available_plot_format(selectedDataSources);
 
   return (
     <div className={styles.box}>
