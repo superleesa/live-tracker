@@ -19,3 +19,5 @@ class ConnectionManager:
     async def send_record(self, record: APIRecord) -> None:
         if self.active_client_socket is not None:
             await self.active_client_socket.send_json(record.model_dump())
+
+ws_manager = ConnectionManager()
