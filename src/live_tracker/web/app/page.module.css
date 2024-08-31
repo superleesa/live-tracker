@@ -9,7 +9,7 @@
 
 .box {
   width: 80%;
-  height: 200px;
+  height: 400px;
   background: rgba(240, 240, 240, 0.8); /* Light grey semi-transparent background */
   backdrop-filter: blur(10px); /* Blurred background */
   border: 2px dashed #ccc; /* Dashed border with a neutral color */

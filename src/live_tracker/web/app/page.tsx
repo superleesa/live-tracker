@@ -58,14 +58,14 @@ function NewPlotBox() {
   const avalailablePlotFormat = get_available_plot_format(selectedDataSources);
 
   return (
-    <div className={styles.box}>
-      <h1>Add New Plot</h1>
-      <FontAwesomeIcon icon={faPlusCircle} size="3x" />
-      {!plotSelected &&
+    <div className={styles.box} style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "10px"}}>
+      
+      {!plot &&
         <Popup
           trigger={open => (
-            <div>
-              <button className="button">Trigger - {open ? 'Opened' : 'Closed'}</button>
+            <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", height: "200px"}}>
+              <h1>Add New Plot</h1>
+              <FontAwesomeIcon icon={faPlusCircle} size="3x" />
             </div>
           )}
           modal
@@ -129,7 +129,7 @@ function NewPlotBox() {
           )) as unknown as React.ReactNode}
         </Popup>
       }
-<div style={{width: "100%"}}>
+      <div style={{width: "100%"}}>
         {plot && <div>{plot}</div>}
       </div>
     </div>
