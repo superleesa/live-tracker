@@ -14,8 +14,21 @@ import 'reactjs-popup/dist/index.css';
 
 import Header from './Header';
 import { SelectableBox } from './selectionBox';
+import LineChart from './lineChart';
 import { DataSource, DataFormatBase, NumberPairFormat, TextFormat, ImageFormat } from './dataSource';
 
+
+
+function getChart(dataSources: DataSource<NumberPairFormat>[], plotType: string): React.FC {
+  // fetch data from the backend
+  for (const dataSource of dataSources) {
+    dataSource.fetchData();
+  }
+  if (plotType === "line") {
+    return <LineChart dataSources={dataSources} />
+  }
+  // TODO: add more chart types
+  throw new Error("Invalid plot type");
 }
 
 function get_available_plot_format(data_sources: DataSource<DataFormatBase>[]): string[] {
@@ -36,16 +49,8 @@ function get_available_plot_format(data_sources: DataSource<DataFormatBase>[]): 
 
 function NewPlotBox() {
   const [plotFormat, setPlotFormat] = useState<string | null>(null);  // store null or PlotType
-  const [selectedDataSources, setSelectedDataSources] = useState<DataSource[]>([]);
-  const avalailablePlotTypes = get_available_plot_types(selectedDataSources);
-  console.log(selectedDataSources);
-  console.log(avalailablePlotTypes);
-
-  // useEffect(() => {
-  //   const updatedPlotTypes = get_available_plot_types(selectedDataSources);
-  //   setAvailablePlotTypes(updatedPlotTypes);
-  // }, [selectedDataSources]);
-
+  const [selectedDataSources, setSelectedDataSources] = useState<DataSource<DataFormatBase>[]>([]);
+  const [plot, setPlot] = useState<React.FC | null>(null);
 
   // TODO: i think we should have enum of data types (e.g. number, image, text) and plot types (e.g. line, bar, scatter)
   const availableDataSourcesRef = useRef<DataSource<DataFormatBase>[]>([new DataSource<NumberPairFormat>("data source 1", "number-number"), new DataSource<NumberPairFormat>("data source 2", "number-number"), new DataSource<TextFormat>("data source 3", "text")])  // this is a mock data source; TODO: fetch from backend
@@ -110,7 +115,12 @@ function NewPlotBox() {
 
               </div>
               <button onClick={() => {
-                setPlotSelected(true);  // TODO: there should be a communication with the backend that this user has selected this plot
+                if (!plotFormat) {
+                  // TODO: add css class to show that the user needs to select a plot
+                  return;
+                }
+                const plot = getChart(selectedDataSources as DataSource<NumberPairFormat>[], plotFormat);
+                setPlot(plot);  // TODO: there should be a communication with the backend that this user has selected this plot
                 close();
               }}>
                 Select Plot
@@ -119,6 +129,9 @@ function NewPlotBox() {
           )) as unknown as React.ReactNode}
         </Popup>
       }
+<div style={{width: "100%"}}>
+        {plot && <div>{plot}</div>}
+      </div>
     </div>
   );
 }
