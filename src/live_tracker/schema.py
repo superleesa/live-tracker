@@ -34,5 +34,5 @@ class Record(BaseModel, Generic[RecordValueT]):
 
 class ClientRecord(BaseModel):
     record: Record
-    datetime: datetime
+    # datetime: datetime
 
