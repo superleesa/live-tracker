@@ -1,6 +1,6 @@
-from typing import Callable
+from typing import Callable, ParamSpec, TypeVar, cast
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, WebSocketException
 from live_tracker.api.connection_manager import ws_manager
 from live_tracker.api.schema import (
     ListDataSorcesMessage,
@@ -18,13 +18,24 @@ browser_router = APIRouter()
 websocket_routes: dict[str, Callable] = {}
 
 
-# A decorator to register a WebSocket route
-def websocket_route(path: str):
-    def decorator(func: Callable):
-        websocket_routes[path] = func
-        return func
+R = TypeVar("R")
+P = ParamSpec("P")
+MessageT = TypeVar("MessageT", bound=WebsocketMessage)
 
-    # TODO: add automatic validation??
+def websocket_route(path: str):
+    """
+    A decorator to register a WebSocket route and cast the data to the expected type
+    """
+    def decorator(func: Callable[[MessageT, str, WebSocket], R]) -> Callable[[dict, str, WebSocket], R]:
+        websocket_routes[path] = func
+        def wrapper(data: dict, client_id: str, connection: WebSocket) -> R:
+            expected_data_type = func.__annotations__["message"]
+            try:
+                casted_data = cast(MessageT, expected_data_type(**data))
+            except Exception as e:
+                raise WebSocketException(code=400, reason=f"Invalid message format: {e}")
+            return func(casted_data, client_id, connection)
+        return wrapper
     return decorator
 
 
