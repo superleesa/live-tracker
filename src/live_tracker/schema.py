@@ -20,7 +20,7 @@ class DataSource(BaseModel):
     type: DataType
     _data_path: Path | None = None  # for now we use actual files not db
     
-    def __hash__(self):
+    def __hash__(self) -> int:
         if self.id is None:
             raise ValueError("Cannot hash unsaved data source")
         return self.id
@@ -35,4 +35,3 @@ class Record(BaseModel, Generic[RecordValueT]):
 class ClientRecord(BaseModel):
     record: Record
     # datetime: datetime
-

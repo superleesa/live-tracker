@@ -6,7 +6,7 @@ class ConnectionManager:
     def __init__(self) -> None:
         # i think these attributes should be persistent
         self.current_data_source_id = 0
-        self.data_sources: dict[int, DataSource] = {}
+        self.data_sources: dict[int, DataSource] = {}  # rename this to data_sources_by_id
         self.active_connections: dict[str, WebSocket] = {}
         self.client_to_subscriptions: dict[str, set[DataSource]] = {}
         self.subscription_to_clients: dict[DataSource, set[str]] = {}

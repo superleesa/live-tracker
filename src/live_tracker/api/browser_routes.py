@@ -44,6 +44,9 @@ async def initialize_ws(
     websocket: WebSocket,
     client_id: str,
 ) -> None:
+    """
+    Note: we are routing within one websocket connection (rather than having multiple websocket connections) to avoid having to manage multiple connections
+    """
     global websocket_routes
 
     await ws_manager.connect(websocket, client_id)
