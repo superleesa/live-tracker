@@ -29,6 +29,7 @@ class ConnectionManager:
         data_source.id = self.current_data_source_id
         self.current_data_source_id += 1  # TODO: hide this
         self.data_sources[data_source.id] = data_source
+        self.subscription_to_clients[data_source] = set()
         return True
 
     def disconnect(self, client_id: str) -> None:
