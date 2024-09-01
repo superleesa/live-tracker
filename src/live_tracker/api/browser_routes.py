@@ -51,10 +51,9 @@ async def initialize_ws(
         while True:
             try:
                 message_raw = WebsocketMessageRaw(**await websocket.receive_json())
-            except Exception:
+            except Exception as e:
                 # should raise pydantic_core._pydantic_core.ValidationError
-                await websocket.send_text("Invalid message format")
-                continue
+                raise WebSocketException(code=400, reason=f"Invalid message format: {e}")
             
             route, data = message_raw.event, message_raw.data
             if route in websocket_routes:
