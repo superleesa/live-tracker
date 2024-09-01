@@ -2,3 +2,4 @@ __pycache__
 .conda
 .mypy_cache
 src/live_tracker.egg-info/
+.vscode/
