@@ -72,3 +72,13 @@ class Tracker(Generic[RecordValueT]):
             
         self.record_queue.append(record)
         self.record_index += 1
+
+
+class NumberTracker(Tracker[float]):
+    def __init__(self, record_name: str, save_path: Path, queue_maxsize: int = 300) -> None:
+        super().__init__(record_name, save_path, DataType.number, queue_maxsize)
+
+
+class NumberPairTracker(Tracker[tuple[float, float]]):
+    def __init__(self, record_name: str, save_path: Path, queue_maxsize: int = 300) -> None:
+        super().__init__(record_name, save_path, DataType.number_pair, queue_maxsize)
