@@ -62,7 +62,7 @@ async def initialize_ws(
             if route in websocket_routes:
                 await websocket_routes[route](data, client_id, websocket)
             else:
-                await websocket.send_text(f"Unknown action: {route}")
+                raise WebSocketException(code=400, reason="Invalid route")
     except WebSocketDisconnect:
         print(f"Client {client_id} disconnected")
 
