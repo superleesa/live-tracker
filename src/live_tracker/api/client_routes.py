@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from live_tracker.api.browser_routes import send_one
 from live_tracker.api.connection_manager import ConnectionManager, ws_manager
 from live_tracker.schema import ClientRecord
-from live_tracker.api.schema import SendRecordMessage, Record
+from live_tracker.api.schema import SendRecordMessage, Record, DataSource
 
 client_router = APIRouter()
 
@@ -38,3 +38,9 @@ async def send_record(client_record: ClientRecord) -> None:
     return  # raise 200 with no content if success
 
 # TODO: add an endpoint to add a data source
+@client_router.post("/data_source")
+async def add_data_source(data_source: DataSource) -> dict:
+    is_successful = ws_manager.add_data_source(data_source)
+    if not is_successful:
+        raise HTTPException(status_code=400, detail="Data source already exists")
+    return {"data_source_id": data_source.id}
